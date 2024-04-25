@@ -44,7 +44,7 @@ try:
 
     # Setting GPIO layout
     GPIO.setmode(
-        GPIO.BCM
+        GPIO.BOARD
     )  # GPIO.setmode(gpio.BOARD) | Use boards header pin order or lableing GPIO##. https://iot4beginners.com/difference-between-bcm-and-board-pin-numbering-in-raspberry-pi/
 
     # # Set pin as input pin pulled down to GND
