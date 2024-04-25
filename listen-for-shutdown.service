@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /usr/local/bin/listen-for-shutdown.py
+ExecStart=/home/opi/opi-gpio/.venv/bin/python /usr/local/bin/listen-for-shutdown.py
 PIDFile=/run/listen-for-shutdown.pid
 
 [Install]

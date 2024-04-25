@@ -1,3 +1,4 @@
+#!/home/opi/opi-gpio/.venv/bin/python
 import OPi.GPIO as GPIO
 import subprocess
 import time
@@ -45,7 +46,7 @@ try:
     # Setting GPIO layout
     GPIO.setmode(
         GPIO.BOARD
-    )  # GPIO.setmode(gpio.BOARD) | Use boards header pin order or lableing GPIO##. https://iot4beginners.com/difference-between-bcm-and-board-pin-numbering-in-raspberry-pi/
+    )  # GPIO.setmode(GPIO.BCM) | Use boards header pin order or lableing GPIO##. https://iot4beginners.com/difference-between-bcm-and-board-pin-numbering-in-raspberry-pi/
 
     # # Set pin as input pin pulled down to GND
     GPIO.setup(PIN_LED, GPIO.OUT, initial=GPIO.HIGH)  # LED ON
