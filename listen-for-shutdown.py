@@ -12,6 +12,7 @@ PIN_BUTTON = 7  # Physical
 try:
     # Button Press Logic
     def button_interupt(channel):
+        print("button_interrupt")
         time_start = time.time()
         time_button = 0
         led_state = GPIO.LOW
@@ -60,5 +61,6 @@ try:
     # Sleep Forever, to keep script alive, button_interupt handles everything.
     while True:
         time.sleep(86400)
-except:
+except Exception as e:
+    print(e)
     GPIO.cleanup()
