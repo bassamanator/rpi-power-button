@@ -1,66 +1,60 @@
-#!/home/opi/opi-gpio/.venv/bin/python
-import OPi.GPIO as GPIO
-import subprocess
+import wiringpi as wp
+from wiringpi import GPIO
 import time
+import subprocess
 
-print("Orange PI GPIO Button & LED Shutdown Script")
 
-# Pin Definitions
-PIN_LED = 8  # Physical
-PIN_BUTTON = 7  # Physical
+def shutdown():
+    print("Shutting down")
+    subprocess.call(["shutdown", "-h", "now"], shell=False)
 
-try:
-    # Button Press Logic
-    def button_interupt(channel):
-        print("button_interrupt")
-        time_start = time.time()
-        time_button = 0
-        led_state = GPIO.LOW
-        time_pressed_max = 3  # seconds
 
-        # Loop while button is pressed, and not passed max time
-        while (
-            GPIO.input(channel) == GPIO.LOW and time_button <= time_pressed_max
-        ):  # wait for the button up
-            # DEBUGGING OUTPUT
-            print("Button:", time_button, led_state)
+def main():
+    LED = 3
+    BUTTON = 2
+    BUTTON_PRESS_DELAY = 5
 
-            # Blink LED
-            GPIO.output(PIN_LED, led_state)  # blink LED
-            led_state = not led_state
-            time.sleep(0.1)  # loop time and led blink interation rate.
+    try:
+        wp.wiringPiSetup()
+        wp.pinMode(LED, GPIO.OUTPUT)
+        wp.pinMode(BUTTON, GPIO.INPUT)
+        wp.pullUpDnControl(BUTTON, GPIO.PUD_UP)
 
-            # How long was the button down?
-            time_button = time.time() - time_start
+        wp.digitalWrite(LED, GPIO.HIGH)  # initial state
 
-        # Set LED back to High, just in case was low.
-        GPIO.output(PIN_LED, GPIO.HIGH)  # blink LED
+        while True:
+            wp.delay(100)
+            BUTTON_STATE = wp.digitalRead(BUTTON)
+            print("checkless button states is: " + str(BUTTON_STATE))
 
-        # Determine Button Time
-        if time_button >= time_pressed_max:
-            print("Power Button Pressed & Held:", time_button)
-            subprocess.call(["shutdown", "-h", "now"], shell=False)  # Power Off
+            time_start = time.time()
+            time_button = 0
+            led_state = GPIO.LOW
 
-    # Ignore Warrnings or not
-    GPIO.setwarnings(False)  # Ignore warning for now
+            while (
+                wp.digitalRead(BUTTON) == GPIO.LOW and time_button <= BUTTON_PRESS_DELAY
+            ):
+                print("starting count")
+                print("Button:", time_button, led_state)
 
-    # Setting GPIO layout
-    GPIO.setmode(
-        GPIO.BOARD
-    )  # GPIO.setmode(GPIO.BCM) | Use boards header pin order or lableing GPIO##. https://iot4beginners.com/difference-between-bcm-and-board-pin-numbering-in-raspberry-pi/
+                wp.digitalWrite(LED, led_state)
+                led_state = not led_state
+                time.sleep(0.1)
 
-    # # Set pin as input pin pulled down to GND
-    GPIO.setup(PIN_LED, GPIO.OUT, initial=GPIO.HIGH)  # LED ON
-    GPIO.setup(PIN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button
+                time_button = time.time() - time_start
 
-    # # Button Press Event
-    GPIO.add_event_detect(
-        PIN_BUTTON, GPIO.FALLING, callback=button_interupt, bouncetime=100
-    )
+            wp.digitalWrite(LED, GPIO.HIGH)  # just in case it was low
 
-    # Sleep Forever, to keep script alive, button_interupt handles everything.
-    while True:
-        time.sleep(86400)
-except Exception as e:
-    print(e)
-    GPIO.cleanup()
+            if time_button >= BUTTON_PRESS_DELAY:
+                break
+
+        shutdown()
+
+    except Exception as e:
+        print(e)
+    except KeyboardInterrupt:
+        print("Goodbye")
+
+
+if __name__ == "__main__":
+    main()
