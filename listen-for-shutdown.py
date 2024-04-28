@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+# https://github.com/WiringPi/WiringPi-Python/
 import wiringpi as wp
 from wiringpi import GPIO
 import time
@@ -10,9 +13,9 @@ def shutdown():
 
 
 def main():
-    LED = 3
-    BUTTON = 2
-    BUTTON_PRESS_DELAY = 5
+    LED = 3  # NOTE wPI: 3; Physical: 8
+    BUTTON = 2  # NOTE wPI: 2; Physical: 7
+    BUTTON_PRESS_DELAY = 3  # NOTE seconds
 
     try:
         wp.wiringPiSetup()
@@ -24,28 +27,26 @@ def main():
 
         while True:
             wp.delay(100)
-            BUTTON_STATE = wp.digitalRead(BUTTON)
-            print("checkless button states is: " + str(BUTTON_STATE))
 
             time_start = time.time()
-            time_button = 0
+            button_press_timer = 0
             led_state = GPIO.LOW
 
             while (
-                wp.digitalRead(BUTTON) == GPIO.LOW and time_button <= BUTTON_PRESS_DELAY
+                wp.digitalRead(BUTTON) == GPIO.LOW
+                and button_press_timer <= BUTTON_PRESS_DELAY
             ):
-                print("starting count")
-                print("Button:", time_button, led_state)
+                # print("Button:", button_press_timer, led_state)  # NOTE for debugging
 
                 wp.digitalWrite(LED, led_state)
                 led_state = not led_state
                 time.sleep(0.1)
 
-                time_button = time.time() - time_start
+                button_press_timer = time.time() - time_start
 
-            wp.digitalWrite(LED, GPIO.HIGH)  # just in case it was low
+            wp.digitalWrite(LED, GPIO.HIGH)  # NOTE just in case it was low
 
-            if time_button >= BUTTON_PRESS_DELAY:
+            if button_press_timer >= BUTTON_PRESS_DELAY:
                 break
 
         shutdown()
@@ -53,7 +54,9 @@ def main():
     except Exception as e:
         print(e)
     except KeyboardInterrupt:
-        print("Goodbye")
+        print("CTRL+C")
+    finally:
+        print("End program")
 
 
 if __name__ == "__main__":
