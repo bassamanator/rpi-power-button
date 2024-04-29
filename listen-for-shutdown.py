@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# https://github.com/WiringPi/WiringPi-Python/
+# https://github.com/orangepi-xunlong/wiringOP-Python
 import wiringpi as wp
 from wiringpi import GPIO
 import time
@@ -14,7 +14,7 @@ def shutdown():
 
 def main():
     LED = 3  # NOTE wPI: 3; Physical: 8
-    BUTTON = 2  # NOTE wPI: 2; Physical: 7
+    BUTTON = 27  # NOTE wPI: 27; Physical: 40
     BUTTON_PRESS_DELAY = 3  # NOTE seconds
 
     try:
