@@ -4,7 +4,9 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /usr/local/bin/listen-for-shutdown.py
+ExecStart=/usr/bin/sudo /usr/bin/python3 /usr/local/bin/listen-for-shutdown.py
+User=opi
+Group=sudo
 PIDFile=/run/listen-for-shutdown.pid
 
 [Install]
