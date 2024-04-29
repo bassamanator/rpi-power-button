@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# https://github.com/WiringPi/WiringPi-Python/
+# https://github.com/orangepi-xunlong/wiringOP-Python
 import wiringpi as wp
 from wiringpi import GPIO
 import time
