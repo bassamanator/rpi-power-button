@@ -10,6 +10,7 @@ Connect the LED and BUTTON as follows:
 # listen-for-shutdown.py
 LED = 3 # NOTE wPI: 3; Physical: 8
 BUTTON = 27 # NOTE wPI: 27; Physical: 40
+# ⚠️ In case this get's outdated, check `listen-for-shutdown.py` for actual pins
 ```
 
 Differences between this branch and the others:
