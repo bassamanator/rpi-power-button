@@ -12,6 +12,25 @@ PIN_BUTTON = 3  # GPIO3 / Pin #5
 TIME_PRESSED_MAX = 3  # seconds
 
 try:
+
+    def button_pressed():
+        print("button was pressed")
+        led_state = GPIO.LOW
+
+        # Blink LED
+        GPIO.output(PIN_LED, led_state)  # blink LED
+        led_state = not led_state
+        time.sleep(0.1)  # loop time and led blink interation rate.
+
+    def button_released():
+        print("button was released")
+        led_state = GPIO.HIGH
+        GPIO.output(PIN_LED, led_state)  # LED turn on
+
+    def do_shutdown():
+        print("Shutting down...")
+        subprocess.call(["shutdown", "-h", "now"], shell=False)  # Power Off
+
     # Button Press Logic
     def button_interupt(channel):
         time_start = time.time()
@@ -57,7 +76,10 @@ try:
     # GPIO.add_event_detect(
     #     PIN_BUTTON, GPIO.FALLING, callback=button_interupt, bouncetime=100
     # )
-    POWER_BUTTON.when_held = button_interupt
+
+    POWER_BUTTON.when_pressed = button_pressed
+    POWER_BUTTON.when_released = button_released
+    POWER_BUTTON.when_held = do_shutdown
 
     # Sleep Forever, to keep script alive, button_interupt handles everything.
     while True:
