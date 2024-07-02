@@ -2,12 +2,14 @@
 import RPi.GPIO as GPIO
 import subprocess
 import time
+from gpiozero import Button
 
 print("Raspberry PI GPIO Button & LED Shutdown Script")
 
 # Pin Definitions
 PIN_LED = 4  # GPIO4 / Pin #7
 PIN_BUTTON = 3  # GPIO3 / Pin #5
+TIME_PRESSED_MAX = 3  # seconds
 
 try:
     # Button Press Logic
@@ -15,11 +17,10 @@ try:
         time_start = time.time()
         time_button = 0
         led_state = GPIO.LOW
-        time_pressed_max = 3  # seconds
 
         # Loop while button is pressed, and not passed max time
         # wait for the button up
-        while GPIO.input(channel) == GPIO.LOW and time_button <= time_pressed_max:
+        while GPIO.input(channel) == GPIO.LOW and time_button <= TIME_PRESSED_MAX:
             # DEBUGGING OUTPUT
             print("Button:", time_button, led_state)
 
@@ -35,7 +36,7 @@ try:
         GPIO.output(PIN_LED, GPIO.HIGH)  # blink LED
 
         # Determine Button Time
-        if time_button >= time_pressed_max:
+        if time_button >= TIME_PRESSED_MAX:
             print("Power Button Pressed & Held:", time_button)
             subprocess.call(["shutdown", "-h", "now"], shell=False)  # Power Off
 
@@ -49,12 +50,14 @@ try:
 
     # # Set pin as input pin pulled down to GND
     GPIO.setup(PIN_LED, GPIO.OUT, initial=GPIO.HIGH)  # LED ON
-    GPIO.setup(PIN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button
+    # GPIO.setup(PIN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Button
+    POWER_BUTTON = Button(PIN_BUTTON, hold_time=TIME_PRESSED_MAX)
 
     # # Button Press Event
-    GPIO.add_event_detect(
-        PIN_BUTTON, GPIO.FALLING, callback=button_interupt, bouncetime=100
-    )
+    # GPIO.add_event_detect(
+    #     PIN_BUTTON, GPIO.FALLING, callback=button_interupt, bouncetime=100
+    # )
+    POWER_BUTTON.when_held = button_interupt
 
     # Sleep Forever, to keep script alive, button_interupt handles everything.
     while True:
