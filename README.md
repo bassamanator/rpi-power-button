@@ -1,29 +1,36 @@
-# pi-power-button
+# Power Button with Indicator
 
-Scripts used in our official [Raspberry Pi power button guide](https://howchoo.com/g/mwnlytk3zmm/how-to-add-a-power-button-to-your-raspberry-pi).
+[Source article](https://howchoo.com/g/mwnlytk3zmm/how-to-add-a-power-button-to-your-raspberry-pi).
 
-## Installation
+\*_This fork implements the use of a power LED indicator as well._
+\*\*_Should work without an LED._
+
+# Pin Definitions
+
+```python
+PIN_LED = 4 # GPIO4 / physical pin #7
+PIN_BUTTON = 3 # GPIO3 / physical pin #5
+```
+
+# Installation
 
 1. [Connect to your Raspberry Pi via SSH](https://howchoo.com/g/mgi3mdnlnjq/how-to-log-in-to-a-raspberry-pi-via-ssh)
-1. Clone this repo: `git clone https://github.com/bassamanator/rpi-power-button.git`
-1. Optional: Edit line 9/10 in listen-for-shutdown.py to your preferred pin (Please see "Is it possible to use another pin other than Pin 5 (GPIO 3/SCL)?" below!)
-1. Run the setup script: `./rpi-power-button/script/install.systemd`
+2. Clone this repo: `git clone https://github.com/bassamanator/rpi-power-button.git`
+3. Run the setup script: `./rpi-power-button/script/install.systemd`
 
-## Uninstallation
-
-If you need to uninstall the power button script in order to use GPIO3 for another project or something:
+# Uninstallation
 
 1. Run the uninstall script: `./rpi-power-button/script/uninstall.systemd`
 
-## Hardware
-
-A full list of what you'll need can be found [here](https://howchoo.com/g/mwnlytk3zmm/how-to-add-a-power-button-to-your-raspberry-pi#parts-list). At a minimum, you'll need a normally-open (NO) power button, some jumper wires, and a soldering iron. If you _don't_ have a soldering iron or don't feel like breaking it out, you can use [this prebuilt button](https://howchoo.com/shop/product/prebuilt-raspberry-pi-power-button?utm_source=github&utm_medium=referral&utm_campaign=git-repo-readme) instead.
+# Physical Connections
 
 Connect the power button to Pin 5 (GPIO 3/SCL) and Pin 6 (GND) as shown in this diagram:
 
 ![Connection Diagram](https://raw.githubusercontent.com/Howchoo/pi-power-button/master/diagrams/pinout.png)
 
-### Is it possible to use another pin other than Pin 5 (GPIO 3/SCL)?
+_Power LED connection is not shown in this diagram._
+
+# Is it possible to use another pin other than Pin 5 (GPIO 3/SCL)?
 
 Not for full functionality, no. There are two main features of the power button:
 
