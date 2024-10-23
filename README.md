@@ -1,6 +1,11 @@
-# Orange Pi Power Button
+# Orange Pi Power Button With LED Indicator
 
-## Notes
+# Expected Behaviour
+
+- The Orange Pi will shutdown if the power button is held for 3 seconds.
+- The LED will blink while the power button is held.
+
+# Notes
 
 - _Should_ work on any Orange Pi.
 - Make sure [https://github.com/orangepi-xunlong/wiringOP-Python](wiringOP-Python) is installed (it should be with an official Orange Pi image).
@@ -25,10 +30,6 @@ BUTTON = 27 # NOTE wPI: 27; Physical: 40
 # Uninstallation
 
 1. Run the uninstall script: `./rpi-power-button/script/uninstall.systemd`
-
-# Hardware
-
-![Connection Diagram](https://raw.githubusercontent.com/Howchoo/pi-power-button/master/diagrams/pinout.png)
 
 # Directory Structure
 
